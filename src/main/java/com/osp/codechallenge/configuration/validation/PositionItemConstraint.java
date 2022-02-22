@@ -4,6 +4,9 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
+/**
+ * Annotation interface to check the constraints of the position number.
+ */
 @Documented
 @Constraint(validatedBy = PositionItemValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })

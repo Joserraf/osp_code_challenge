@@ -9,11 +9,18 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Service class for the shipments management
+ */
 @Service
 public class ShipmentsServiceImpl implements ShipmentsService {
 
     private final ShipmentsRepository shipmentsRepository;
 
+    /**
+     * Autowired constructor for the service
+     * @param shipmentsRepository the mongoDB repository bean.
+     */
     public ShipmentsServiceImpl(ShipmentsRepository shipmentsRepository) {
         this.shipmentsRepository = shipmentsRepository;
     }

@@ -5,6 +5,9 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Tracking key DTO.
+ */
 @Data
 public class TrackingKeyDTO {
 
