@@ -1,5 +1,6 @@
 package com.osp.codechallenge.dto;
 
+import com.osp.codechallenge.configuration.validation.PositionItemConstraint;
 import com.osp.codechallenge.documents.PositionItem;
 import com.osp.codechallenge.documents.TrackingKey;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class ShipmentDTO {
     @NotNull
     @Valid
     private TrackingKey trackingKey;
+    @PositionItemConstraint
     private List<PositionItem> positionItems;
 
 }
