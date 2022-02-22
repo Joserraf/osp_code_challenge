@@ -1,6 +1,6 @@
 package com.osp.codechallenge.configuration.validation;
 
-import com.osp.codechallenge.documents.PositionItem;
+import com.osp.codechallenge.dto.PositionItemDTO;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class PositionItemValidator implements ConstraintValidator<PositionItemConstraint, List<PositionItem>> {
+public class PositionItemValidator implements ConstraintValidator<PositionItemConstraint, List<PositionItemDTO>> {
 
     @Override
     public void initialize(PositionItemConstraint constraintAnnotation) {
@@ -17,10 +17,13 @@ public class PositionItemValidator implements ConstraintValidator<PositionItemCo
     }
 
     @Override
-    public boolean isValid(List<PositionItem> positionItems, ConstraintValidatorContext constraintValidatorContext) {
-        Set<PositionItem> items = new HashSet<>();
-
-        Optional<PositionItem> optionalPositionItem = positionItems.stream().filter(n -> !items.add(n)).findFirst();
-        return !optionalPositionItem.isPresent();
+    public boolean isValid(List<PositionItemDTO> positionItems, ConstraintValidatorContext constraintValidatorContext) {
+        Set<PositionItemDTO> items = new HashSet<>();
+        boolean result = false;
+        if(positionItems != null) {
+            Optional<PositionItemDTO> optionalPositionItem = positionItems.stream().filter(n -> !items.add(n)).findFirst();
+            result = !optionalPositionItem.isPresent();
+        }
+        return result;
     }
 }
