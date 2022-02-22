@@ -27,12 +27,14 @@ public class ShipmentsController {
     @PostMapping
     public Mono<Shipment> saveShipment(@Valid @RequestBody ShipmentDTO shipmentDTO){
         //TODO: ADD MESSAGE TO THE VALIDATION OF THE REQUEST
+        //TODO: COMPLETE ALL THE EXCEPTIONS MANAGEMENTS AS AN "EXTRA", SO OUTSIDE THE MAIN POINTS
+        //TODO: CHECK THE ERROR HANDLING OF THE MONGODB INDEXES
         Shipment shipment = mapper.toShipmentDocument(shipmentDTO);
         return shipmentsService.saveShipment(shipment);
     }
 
     @GetMapping
-    public Flux<Shipment> getShipments(@RequestParam String id){
-        return shipmentsService.getShipment(id);
+    public Flux<ShipmentDTO> getShipments(@RequestParam String id){
+        return mapper.toShipmentDTOFlux(shipmentsService.getShipment(id));
     }
 }

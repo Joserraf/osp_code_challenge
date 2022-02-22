@@ -12,6 +12,6 @@ public class Shipment {
 
     @Id
     private String id;
-    private TrackingKey trackingKey;
-    private List<PositionItem> positionItems;
+    private TrackingKey tracking_key;
+    private List<PositionItem> position_items;
 }
