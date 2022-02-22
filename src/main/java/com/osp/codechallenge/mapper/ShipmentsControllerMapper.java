@@ -12,16 +12,18 @@ import reactor.core.publisher.Flux;
 @Mapper(componentModel="spring")
 public interface ShipmentsControllerMapper {
 
-    @Mapping(source = "trackingKey", target = "tracking_key")
-    @Mapping(source = "positionItems", target = "position_items")
-    @Mapping(source = "trackingKey.trackingNumber", target = "tracking_key.tracking_number")
+    @Mapping(source = "trackingKey", target = "trackingKey")
+    @Mapping(source = "positionItems", target = "positionItems")
     Shipment toShipmentDocument(ShipmentDTO dto);
 
     @InheritInverseConfiguration
     ShipmentDTO map(Shipment source);
 
-    @Mapping(source = "orderId", target = "order_id")
+    @Mapping(source = "orderId", target = "orderId")
     PositionItem toPositionItem(PositionItemDTO positionItemDTO);
+
+    @InheritInverseConfiguration
+    PositionItemDTO toPositionItemDTO(PositionItem positionItem);
 
     default Flux<ShipmentDTO> toShipmentDTOFlux(Flux<Shipment> flux) {
         return flux.map(this::map);

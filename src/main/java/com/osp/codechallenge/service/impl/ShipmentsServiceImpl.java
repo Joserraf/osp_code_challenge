@@ -25,8 +25,8 @@ public class ShipmentsServiceImpl implements ShipmentsService {
 
     @Override
     public Flux<Shipment> getShipment(String carrier, String trackingNumber){
-        return shipmentsRepository.findAll(Example.of(Shipment.builder().tracking_key(
-                TrackingKey.builder().tracking_number(trackingNumber).carrier(carrier).build()).build()));
+        return shipmentsRepository.findAll(Example.of(Shipment.builder().trackingKey(
+                TrackingKey.builder().trackingNumber(trackingNumber).carrier(carrier).build()).build()));
     }
 
 }
