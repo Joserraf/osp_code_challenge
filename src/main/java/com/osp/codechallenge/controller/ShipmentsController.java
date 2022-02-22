@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 @RestController
 @SecurityRequirement(name = "codechallenge")
 @RequestMapping("/shipments")
@@ -23,7 +25,8 @@ public class ShipmentsController {
     }
 
     @PostMapping
-    public Mono<Shipment> saveShipment(@RequestBody ShipmentDTO shipmentDTO){
+    public Mono<Shipment> saveShipment(@Valid @RequestBody ShipmentDTO shipmentDTO){
+        //TODO: ADD MESSAGE TO THE VALIDATION OF THE REQUEST
         Shipment shipment = mapper.toShipmentDocument(shipmentDTO);
         return shipmentsService.saveShipment(shipment);
     }

@@ -25,7 +25,7 @@ public class ShipmentsServiceImpl implements ShipmentsService {
     @Override
     public Flux<Shipment> getShipment(String id) {
         Flux<Shipment> shipmentsFlux = shipmentsRepository.findAll();
-        return shipmentsFlux.publish();
+        return shipmentsFlux;
     }
 
 
