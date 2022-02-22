@@ -2,7 +2,6 @@ package com.osp.codechallenge.service.impl;
 
 import com.osp.codechallenge.documents.Shipment;
 import com.osp.codechallenge.repositories.ShipmentsRepository;
-import com.osp.codechallenge.repositories.ShipmentsRepositoryNotReactive;
 import com.osp.codechallenge.service.ShipmentsService;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -12,11 +11,9 @@ import reactor.core.publisher.Mono;
 public class ShipmentsServiceImpl implements ShipmentsService {
 
     private final ShipmentsRepository shipmentsRepository;
-    private final ShipmentsRepositoryNotReactive shipmentsRepositoryNotReactive;
 
-    public ShipmentsServiceImpl(ShipmentsRepository shipmentsRepository, ShipmentsRepositoryNotReactive shipmentsRepositoryNotReactive) {
+    public ShipmentsServiceImpl(ShipmentsRepository shipmentsRepository) {
         this.shipmentsRepository = shipmentsRepository;
-        this.shipmentsRepositoryNotReactive = shipmentsRepositoryNotReactive;
     }
 
     @Override
