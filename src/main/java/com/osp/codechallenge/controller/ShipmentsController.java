@@ -34,7 +34,8 @@ public class ShipmentsController {
     }
 
     @GetMapping
-    public Flux<ShipmentDTO> getShipments(@RequestParam String id){
-        return mapper.toShipmentDTOFlux(shipmentsService.getShipment(id));
+    public Flux<Shipment> getShipments(@RequestParam String carrier, @RequestParam String trackingNumber){
+        mapper.toShipmentDTOFlux(shipmentsService.getShipment(carrier, trackingNumber));
+        return shipmentsService.getShipment(carrier, trackingNumber);
     }
 }
