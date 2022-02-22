@@ -1,8 +1,10 @@
 package com.osp.codechallenge.service.impl;
 
 import com.osp.codechallenge.documents.Shipment;
+import com.osp.codechallenge.documents.TrackingKey;
 import com.osp.codechallenge.repositories.ShipmentsRepository;
 import com.osp.codechallenge.service.ShipmentsService;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,16 +20,18 @@ public class ShipmentsServiceImpl implements ShipmentsService {
 
     @Override
     public Mono<Shipment> saveShipment(Shipment shipmentDTO) {
-        Mono<Shipment> shipmentsMono = shipmentsRepository.save(shipmentDTO);
-        return shipmentsMono;
+        return shipmentsRepository.save(shipmentDTO);
     }
 
     @Override
-    public Flux<Shipment> getShipment(String id) {
-        Flux<Shipment> shipmentsFlux = shipmentsRepository.findAll();
-        return shipmentsFlux;
+    public Flux<Shipment> getShipment(String carrier, String trackingNumber){
+        return shipmentsRepository.findAll(Example.of(Shipment.builder().trackingKey(
+                TrackingKey.builder().trackingNumber(trackingNumber).carrier(carrier).build()).build()));
     }
 
-
+    @Override
+    public Flux<Shipment> getShipments(String orderId) {
+        return shipmentsRepository.findAllByPositionItemsOrderId(orderId);
+    }
 
 }
