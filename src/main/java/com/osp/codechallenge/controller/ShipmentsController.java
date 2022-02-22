@@ -29,13 +29,21 @@ public class ShipmentsController {
         //TODO: ADD MESSAGE TO THE VALIDATION OF THE REQUEST
         //TODO: COMPLETE ALL THE EXCEPTIONS MANAGEMENTS AS AN "EXTRA", SO OUTSIDE THE MAIN POINTS
         //TODO: CHECK THE ERROR HANDLING OF THE MONGODB INDEXES
+        //TODO: ADD LOGS
+        //TODO: TESTING
+        //TODO: DOCUMENTATION
+        //TODO: OPEN-API
         Shipment shipment = mapper.toShipmentDocument(shipmentDTO);
         return shipmentsService.saveShipment(shipment);
     }
 
     @GetMapping
-    public Flux<Shipment> getShipments(@RequestParam String carrier, @RequestParam String trackingNumber){
-        mapper.toShipmentDTOFlux(shipmentsService.getShipment(carrier, trackingNumber));
-        return shipmentsService.getShipment(carrier, trackingNumber);
+    public Flux<ShipmentDTO> getShipment(@RequestParam String carrier, @RequestParam String trackingNumber){
+        return mapper.toShipmentDTOFlux(shipmentsService.getShipment(carrier, trackingNumber));
+    }
+
+    @GetMapping("/{orderId}")
+    public Flux<ShipmentDTO> getShipments(@PathVariable String orderId){
+        return mapper.toShipmentDTOFlux(shipmentsService.getShipments(orderId));
     }
 }

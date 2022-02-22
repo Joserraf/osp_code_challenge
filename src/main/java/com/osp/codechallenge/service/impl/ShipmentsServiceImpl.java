@@ -29,4 +29,9 @@ public class ShipmentsServiceImpl implements ShipmentsService {
                 TrackingKey.builder().trackingNumber(trackingNumber).carrier(carrier).build()).build()));
     }
 
+    @Override
+    public Flux<Shipment> getShipments(String orderId) {
+        return shipmentsRepository.findAllByPositionItemsOrderId(orderId);
+    }
+
 }

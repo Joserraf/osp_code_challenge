@@ -8,4 +8,6 @@ public interface ShipmentsService {
     Mono<Shipment> saveShipment(Shipment shipmentDTO);
 
     Flux<Shipment> getShipment(String carrier, String trackingNumber);
+
+    Flux<Shipment> getShipments(String orderId);
 }
