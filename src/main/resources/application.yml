@@ -1,0 +1,12 @@
+
+spring:
+  profiles:
+    active: dev
+  data:
+    mongodb:
+      uri: mongodb+srv://challenge_app:tZiCcdqKYcrapDIp@cluster0.ld6i7.mongodb.net/OSP_CODE_CHALLENGE?retryWrites=true&w=majority
+      database: OSP_CODE_CHALLENGE
+
+logging:
+  level:
+    org.springframework: ERROR
