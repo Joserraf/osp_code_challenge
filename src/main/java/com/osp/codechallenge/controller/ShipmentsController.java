@@ -5,6 +5,8 @@ import com.osp.codechallenge.dto.ShipmentDTO;
 import com.osp.codechallenge.mapper.ShipmentsControllerMapper;
 import com.osp.codechallenge.service.ShipmentsService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -14,6 +16,7 @@ import javax.validation.Valid;
 @RestController
 @SecurityRequirement(name = "codechallenge")
 @RequestMapping("/shipments")
+@Slf4j
 public class ShipmentsController {
 
     private final ShipmentsService shipmentsService;
@@ -33,6 +36,7 @@ public class ShipmentsController {
         //TODO: TESTING
         //TODO: DOCUMENTATION
         //TODO: OPEN-API
+        //log.info("Authenticated user is: " + username);
         Shipment shipment = mapper.toShipmentDocument(shipmentDTO);
         return shipmentsService.saveShipment(shipment);
     }

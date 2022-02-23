@@ -2,31 +2,43 @@ package com.osp.codechallenge.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebFluxSecurity
+public class SecurityConfig {
 
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user1").password(passwordEncoder().encode("user1Pass"))
-                .authorities("ADMIN");
+    @Bean
+    public SecurityWebFilterChain securitygWebFilterChain(ServerHttpSecurity http) {
+        return http.authorizeExchange()
+                .pathMatchers("/shipments")
+                .hasAuthority("ROLE_ADMIN")
+                .anyExchange()
+                .authenticated()
+                .and()
+                .formLogin().disable().httpBasic()
+                .and()
+                .csrf()
+                .disable()
+                .build();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-                .antMatchers("/swagger-ui/**", "/openapi/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+    @Bean
+    public MapReactiveUserDetailsService userDetailsService() {
+        UserDetails user = User
+                .withUsername("user1")
+                .password(passwordEncoder().encode("user1Pass"))
+                .roles("ADMIN")
+                .build();
+
+        return new MapReactiveUserDetailsService(user);
     }
 
     @Bean
