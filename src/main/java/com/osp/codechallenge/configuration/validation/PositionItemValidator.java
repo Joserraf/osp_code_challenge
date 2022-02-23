@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Validator with the logic to check that no Position Item has the same combination of fields than another.
+ * Left here for learning purposes. Seems like it's not possible to make it work in a reactive environment.
+ */
+@Deprecated
 public class PositionItemValidator implements ConstraintValidator<PositionItemConstraint, List<PositionItemDTO>> {
 
     @Override

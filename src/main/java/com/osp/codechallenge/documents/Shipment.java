@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
+/**
+ * Shipment model for mongoDB.
+ */
 @Data
 @Document(collection = "_shipments")
 @Builder
