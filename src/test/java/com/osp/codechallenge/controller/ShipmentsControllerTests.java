@@ -3,7 +3,10 @@ package com.osp.codechallenge.controller;
 import com.osp.codechallenge.configuration.SecurityConfig;
 import com.osp.codechallenge.documents.PositionItem;
 import com.osp.codechallenge.documents.Shipment;
+import com.osp.codechallenge.documents.TrackingKey;
+import com.osp.codechallenge.dto.PositionItemDTO;
 import com.osp.codechallenge.dto.ShipmentDTO;
+import com.osp.codechallenge.dto.TrackingKeyDTO;
 import com.osp.codechallenge.mapper.ShipmentsControllerMapperImpl;
 import com.osp.codechallenge.repositories.ShipmentsRepository;
 import com.osp.codechallenge.service.impl.ShipmentsServiceImpl;
@@ -26,8 +29,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
@@ -61,8 +67,13 @@ public class ShipmentsControllerTests {
     @Test
     @WithMockUser(username = "user1", password = "user1Pass", roles="ADMIN")
     void testCreateShipment() {
-        Shipment shipment = Shipment.builder().build();
 
+        String carrier = "MRW";
+        String trackingNumber = "3847820";
+        TrackingKeyDTO trackingKeyDTO = TrackingKeyDTO.builder().carrier(carrier).trackingNumber(trackingNumber).build();
+        ShipmentDTO shipmentDTO = ShipmentDTO.builder().trackingKey(trackingKeyDTO).build();
+        TrackingKey trackingKey = TrackingKey.builder().carrier(carrier).trackingNumber(trackingNumber).build();
+        Shipment shipment = Shipment.builder().trackingKey(trackingKey).build();
         Mockito.when(repository.save(shipment)).thenReturn(Mono.just(shipment));
 
         webTestClient
@@ -70,11 +81,57 @@ public class ShipmentsControllerTests {
                 .post()
                 .uri("/shipments")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(new ShipmentDTO()))
+                .body(BodyInserters.fromValue(shipmentDTO))
                 .exchange()
                 .expectStatus().isCreated();
 
         Mockito.verify(repository, times(1)).save(shipment);
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "user1Pass", roles="ADMIN")
+    void testCreateShipmentExpectPositionNumberError() {
+
+        String carrier = "MRW";
+        String trackingNumber = "3847820";
+        List<PositionItemDTO> list = new LinkedList<>();
+        list.add(PositionItemDTO.builder().orderId("orderId").id("id").build());
+        list.add(PositionItemDTO.builder().orderId("orderId").id("id").build());
+        TrackingKeyDTO trackingKeyDTO = TrackingKeyDTO.builder().carrier(carrier).trackingNumber(trackingNumber).build();
+        ShipmentDTO shipmentDTO = ShipmentDTO.builder().trackingKey(trackingKeyDTO).positionItems(list).build();
+        TrackingKey trackingKey = TrackingKey.builder().carrier(carrier).trackingNumber(trackingNumber).build();
+        Shipment shipment = Shipment.builder().trackingKey(trackingKey).build();
+        Mockito.when(repository.save(shipment)).thenReturn(Mono.just(shipment));
+        webTestClient
+                .mutateWith(csrf())
+                .post()
+                .uri("/shipments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(shipmentDTO))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "user1Pass", roles="ADMIN")
+    void testCreateShipmentExpectTrackingNumberError() {
+
+        String carrier = "MRW";
+        String trackingNumber = "";
+        TrackingKeyDTO trackingKeyDTO = TrackingKeyDTO.builder().carrier(carrier).trackingNumber(trackingNumber).build();
+        ShipmentDTO shipmentDTO = ShipmentDTO.builder().trackingKey(trackingKeyDTO).build();
+        TrackingKey trackingKey = TrackingKey.builder().carrier(carrier).trackingNumber(trackingNumber).build();
+        Shipment shipment = Shipment.builder().trackingKey(trackingKey).build();
+        Mockito.when(repository.save(shipment)).thenReturn(Mono.just(shipment));
+
+        webTestClient
+                .mutateWith(csrf())
+                .post()
+                .uri("/shipments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(shipmentDTO))
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
     @Test
