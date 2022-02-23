@@ -3,7 +3,6 @@ package com.osp.codechallenge.controller;
 import com.osp.codechallenge.configuration.SecurityConfig;
 import com.osp.codechallenge.documents.PositionItem;
 import com.osp.codechallenge.documents.Shipment;
-import com.osp.codechallenge.dto.PositionItemDTO;
 import com.osp.codechallenge.dto.ShipmentDTO;
 import com.osp.codechallenge.mapper.ShipmentsControllerMapperImpl;
 import com.osp.codechallenge.repositories.ShipmentsRepository;
@@ -29,7 +28,6 @@ import reactor.core.publisher.Mono;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
@@ -38,7 +36,7 @@ import static org.springframework.web.reactive.function.client.ExchangeFilterFun
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = ShipmentsController.class)
 @Import({ShipmentsServiceImpl.class, ShipmentsControllerMapperImpl.class, SecurityConfig.class})
-public class ShipmentControllerTest {
+public class ShipmentsControllerTests {
 
     @MockBean
     private ShipmentsRepository repository;
@@ -86,7 +84,7 @@ public class ShipmentControllerTest {
 
         Mockito.when(repository.findAll(any(Example.class))).thenReturn(Flux.just(shipment));
 
-        WebTestClient.ResponseSpec result = webTestClient
+        webTestClient
                 .mutateWith(csrf())
                 .get()
                 .uri(uriBuilder ->
@@ -108,7 +106,7 @@ public class ShipmentControllerTest {
 
         Mockito.when(repository.findAllByPositionItemsOrderId(orderId)).thenReturn(Flux.just(shipment));
 
-        WebTestClient.ResponseSpec result = webTestClient
+        webTestClient
                 .mutateWith(csrf())
                 .get()
                 .uri(uriBuilder ->
