@@ -1,5 +1,6 @@
 package com.osp.codechallenge.configuration;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
  * Class containing the configuration of spring security
  */
 @Configuration
+@Slf4j
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
@@ -35,10 +37,10 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint((swe, e) -> Mono.fromRunnable(() -> {
                     swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                    //TODO: ADD EXCEPTION HANDLING
+                    log.error(e.getMessage());
                 })).accessDeniedHandler((swe, e) -> Mono.fromRunnable(() -> {
                     swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-                    //TODO: ADD EXCEPTION HANDLING
+                    log.error(e.getMessage());
                 }))
                 .and().build();
     }

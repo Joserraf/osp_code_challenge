@@ -6,7 +6,9 @@ import java.lang.annotation.*;
 
 /**
  * Annotation interface to check the constraints of the position number.
+ * Left here for learning purposes. Seems like it's not possible to make it work in a reactive environment.
  */
+@Deprecated
 @Documented
 @Constraint(validatedBy = PositionItemValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })
