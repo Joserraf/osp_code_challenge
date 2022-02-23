@@ -7,6 +7,3 @@ spring:
 server:
   error:
     include-message: always
-
-logging:
-  level: info
