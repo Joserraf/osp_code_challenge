@@ -1,7 +1,7 @@
 spring:
-  profiles:
-    active: dev
   data:
     mongodb:
       uri: mongodb+srv://challenge_app:tZiCcdqKYcrapDIp@cluster0.ld6i7.mongodb.net/ospCodeChallengeDB?retryWrites=true&w=majority
       database: ospCodeChallengeDB
+  logging:
+    level: info

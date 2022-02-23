@@ -26,8 +26,8 @@ public class ShipmentsServiceImpl implements ShipmentsService {
     }
 
     @Override
-    public Mono<Shipment> saveShipment(Shipment shipmentDTO) {
-        return shipmentsRepository.save(shipmentDTO);
+    public Mono<Shipment> saveShipment(Shipment shipment) {
+        return shipmentsRepository.save(shipment);
     }
 
     @Override
