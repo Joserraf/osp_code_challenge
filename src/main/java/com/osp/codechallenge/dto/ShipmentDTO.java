@@ -1,6 +1,7 @@
 package com.osp.codechallenge.dto;
 
 import com.osp.codechallenge.configuration.validation.PositionItemConstraint;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.Valid;

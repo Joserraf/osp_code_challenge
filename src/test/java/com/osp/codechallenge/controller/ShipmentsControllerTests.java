@@ -1,7 +1,9 @@
 package com.osp.codechallenge.controller;
 
 import com.osp.codechallenge.configuration.SecurityConfig;
+import com.osp.codechallenge.documents.PositionItem;
 import com.osp.codechallenge.documents.Shipment;
+import com.osp.codechallenge.dto.PositionItemDTO;
 import com.osp.codechallenge.dto.ShipmentDTO;
 import com.osp.codechallenge.mapper.ShipmentsControllerMapperImpl;
 import com.osp.codechallenge.repositories.ShipmentsRepository;
@@ -15,13 +17,19 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Example;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Collections;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
@@ -69,5 +77,46 @@ public class ShipmentControllerTest {
                 .expectStatus().isCreated();
 
         Mockito.verify(repository, times(1)).save(shipment);
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "user1Pass", roles="ADMIN")
+    void testGetShipment() {
+        Shipment shipment = Shipment.builder().build();
+
+        Mockito.when(repository.findAll(any(Example.class))).thenReturn(Flux.just(shipment));
+
+        WebTestClient.ResponseSpec result = webTestClient
+                .mutateWith(csrf())
+                .get()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/shipments")
+                                .queryParam("carrier", "MRW")
+                                .queryParam("trackingNumber", "385868533623")
+                                .build())
+                .exchange()
+                .expectStatus().isOk();
+        Mockito.verify(repository, times(1)).findAll(any(Example.class));
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "user1Pass", roles="ADMIN")
+    void testGetShipments() {
+        String orderId = "orderId";
+        Shipment shipment = Shipment.builder().positionItems(Collections.singletonList(PositionItem.builder().orderId(orderId).build())).build();
+
+        Mockito.when(repository.findAllByPositionItemsOrderId(orderId)).thenReturn(Flux.just(shipment));
+
+        WebTestClient.ResponseSpec result = webTestClient
+                .mutateWith(csrf())
+                .get()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/shipments/"+orderId)
+                                .build())
+                .exchange()
+                .expectStatus().isOk();
+        Mockito.verify(repository, times(1)).findAllByPositionItemsOrderId(orderId);
     }
 }

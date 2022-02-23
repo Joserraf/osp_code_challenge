@@ -1,12 +1,13 @@
 package com.osp.codechallenge.controller;
 
+import com.osp.codechallenge.configuration.exceptions.RuntimeMongoException;
 import com.osp.codechallenge.documents.Shipment;
 import com.osp.codechallenge.dto.ShipmentDTO;
 import com.osp.codechallenge.mapper.ShipmentsControllerMapper;
 import com.osp.codechallenge.service.ShipmentsService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,6 +42,7 @@ public class ShipmentsController {
      * @param trackingNumber the tracking number
      * @return a flux with the shipment information
      */
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Flux<ShipmentDTO> getShipment(@RequestParam String carrier, @RequestParam String trackingNumber){
         return mapper.toShipmentDTOFlux(shipmentsService.getShipment(carrier, trackingNumber));
@@ -51,6 +53,7 @@ public class ShipmentsController {
      * @param orderId the order identifier of the shipment
      * @return a flux with the information of every shipment
      */
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{orderId}")
     public Flux<ShipmentDTO> getShipments(@PathVariable String orderId){
         return mapper.toShipmentDTOFlux(shipmentsService.getShipments(orderId));
@@ -61,6 +64,7 @@ public class ShipmentsController {
      * @param shipmentDTO the DTO object containing all the information about the shipment
      * @return the newly created shipment
      */
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Mono<Shipment> saveShipment(@Valid @RequestBody ShipmentDTO shipmentDTO){
         //TODO: ADD MESSAGE TO THE VALIDATION OF THE REQUEST
