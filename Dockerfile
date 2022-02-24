@@ -7,5 +7,5 @@ FROM openjdk:8-alpine AS app
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 COPY --from=build ./app/target/codechallenge-0.0.1-SNAPSHOT.jar ./app/codechallenge-0.0.1-SNAPSHOT.jar
-EXPOSE 8081
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","./app/codechallenge-0.0.1-SNAPSHOT.jar"]
